@@ -1,11 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from 'App/Models/User'
+import Usuario from 'App/Models/Usuario'
 import { md5 } from 'js-md5'
 import { DateTime } from 'luxon'
 
-export default class UsersController {
+export default class UsuariosController {
   public async index({}: HttpContextContract) {
-    return User.all()
+    return Usuario.all()
   }
 
   public async store({ request, response }: HttpContextContract) {
@@ -13,16 +13,16 @@ export default class UsersController {
     if (nome === undefined || cpf === undefined || senha === undefined) {
       return response.status(400)
     } else {
-      const newUser = { nome, cpf, senha }
+      const newUsuario = { nome, cpf, senha }
       const newPassword = md5(senha)
-      newUser.senha(newPassword)
-      User.create(newUser)
-      return response.status(201).send(newUser)
+      newUsuario.senha(newPassword)
+      Usuario.create(newUsuario)
+      return response.status(201).send(newUsuario)
     }
   }
 
   public async show({ params, response }: HttpContextContract) {
-    const usuarioEncontrado = await User.findByOrFail('id', params.id)
+    const usuarioEncontrado = await Usuario.findByOrFail('id', params.id)
     if (usuarioEncontrado === undefined) {
       return response.status(404)
     } else {
@@ -32,7 +32,7 @@ export default class UsersController {
 
   public async update({ params, request, response }: HttpContextContract) {
     const { nome, cpf, senha } = request.body()
-    const usuarioEncontrado = await User.findByOrFail('id', params.id)
+    const usuarioEncontrado = await Usuario.findByOrFail('id', params.id)
     if (!usuarioEncontrado) {
       return response.status(404)
     } else {
@@ -47,7 +47,7 @@ export default class UsersController {
   }
 
   public async destroy({ params, response }: HttpContextContract) {
-    const usuarioEncontrado = await User.findByOrFail('id', params.id)
+    const usuarioEncontrado = await Usuario.findByOrFail('id', params.id)
     if (!usuarioEncontrado) {
       return response.status(400)
     } else {
