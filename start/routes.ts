@@ -42,9 +42,48 @@ Route.get('/favoritos/:nome', async ({params}) => {
 })
 
 //Rota post para criar um novo favorito
-Route.post('/favoritos', async ({request,response})=>{
- const {nome,url,importante}=request.body()
- const newFavorito={id:favoritos.length+1,nome,url,importante}
- favoritos.push(newFavorito)
- return response.status(201).send(newFavorito)
+Route.post('/favoritos', async ({request, response})=>{
+  const{nome,url,importante} = request.body()
+  if (nome === undefined || url === undefined || importante === undefined) {
+    return response.status(400)
+  } else {
+    const newFavorito = {id:favoritos.length+1,nome,url,importante}
+    favoritos.push(newFavorito)
+    return response.status(201).send(newFavorito)
+  }
+
 })
+
+
+Route.delete('/favoritos/:id', async ({response, params})=>{
+  let favorito = favoritos.find((favorito) => favorito.id == params.id)
+  console.log(favorito, "favorito encontrado!")
+  if (favorito!=undefined) {
+    const indice = favoritos.indexOf(favorito)
+    favoritos.splice(indice)
+    return response.status(200)
+  } else {
+    return response.status(404)
+  }
+})
+
+Route.put('/favoritos/:id', async ({response, params, request}) =>{
+  const{nome,url,importante} = request.body()
+  let encontrado = favoritos.find((favorito) => favoritos.id == params.id)
+  if (encontrado!=undefined){
+    const indice = favoritos.indexOf(encontrado)
+    if(nome != null) {
+      favoritos[indice].nome = nome
+    }
+    if (url !=null) {
+      favoritos[indice].url = url
+    }
+    if (importante !=null) {
+      favoritos[indice].importante = importante
+    }
+    return response.status(200)
+  } else {
+    return response.status(404)
+  }
+})
+Route.resource('favoritao', 'FavoritosController').apiOnly

@@ -10,7 +10,7 @@ test.group('List favoritos', () => {
   test('exibir favorito com id', async ({client})=>{
     const resposta=await client.get('/favoritos/1')
     resposta.assertStatus(200)
-    resposta.assertBodyContains({id:1})
+    resposta.assertBodyContains({nome:'Google'})
   })
 
   test('favorito nao encontrado', async ({client})=>{
