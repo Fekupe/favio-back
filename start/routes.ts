@@ -87,3 +87,5 @@ Route.put('/favoritos/:id', async ({response, params, request}) =>{
   }
 })
 Route.resource('favoritao', 'FavoritosController').apiOnly
+
+Route.resource('usuarios', 'UsuariosController').apiOnly
